@@ -1,0 +1,66 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "path": "trigger-update",
+        "httpMethod": "POST",
+        "authentication": "basicAuth"
+      },
+      "id": "WebhookTrigger",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [250, 250],
+      "credentials": {
+        "httpBasicAuth": {
+          "user": "youradminuser",
+          "password": "youradminpassword"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "command": "/home/runcloud/webapps/n8n/n8n-data/update_n8n.sh"
+      },
+      "id": "ExecuteCommand",
+      "name": "Execute Command",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [550, 250]
+    },
+    {
+      "parameters": {
+        "responseData": "n8n update triggered."
+      },
+      "id": "RespondToWebhook",
+      "name": "Respond to Webhook",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [850, 250]
+    }
+  ],
+  "connections": {
+    "WebhookTrigger": {
+      "main": [
+        [
+          {
+            "node": "ExecuteCommand",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ExecuteCommand": {
+      "main": [
+        [
+          {
+            "node": "RespondToWebhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}
