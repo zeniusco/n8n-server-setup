@@ -1,0 +1,31 @@
+version: '3.8'
+services:
+  n8n:
+    image: n8nio/n8n:latest
+    restart: unless-stopped
+    env_file:
+      - .env
+    ports:
+      - "127.0.0.1:5678:5678"
+    volumes:
+      - ./data:/home/node/.n8n
+    depends_on:
+      - n8n-postgres
+    networks:
+      - n8nnet
+
+  n8n-postgres:
+    image: postgres:16
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=${DB_POSTGRESDB_USER}
+      - POSTGRES_PASSWORD=${DB_POSTGRESDB_PASSWORD}
+      - POSTGRES_DB=${DB_POSTGRESDB_DATABASE}
+    volumes:
+      - ./postgres:/var/lib/postgresql/data
+    networks:
+      - n8nnet
+
+networks:
+  n8nnet:
+    driver: bridge
