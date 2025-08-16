@@ -133,8 +133,6 @@ DB_POSTGRESDB_PASSWORD=supersecret
 
 ## 8. Configure Nginx Proxy for n8n
 
-## **8\. Configure Nginx Proxy for n8n (RunCloud UI & Predefined Config)**
-
 1.  In your RunCloud dashboard, go to your `n8n.zeniusco.com` web app.
 2.  Go to **Nginx Config**.
 3.  Under **Predefined Config (Optional):**
