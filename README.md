@@ -6,28 +6,30 @@
 ---
 
 ## 1. Prepare Your Files and Folder Structure
-
-n8n-setup/  
-├── n8n-data/  
-│ ├── docker-compose.yml  
-│ ├── .env.example  
-│ ├── update_n8n.sh  
-│ ├── install-and-migration.sh  
-│ ├── manual-n8n-update-workflow.json  
-│ ├── data/  
-│ │ └── .gitkeep  
-│ ├── postgres/  
-│ │ └── .gitkeep  
-├── README.md  
-├── .gitignore  
+```
+n8n-setup/
+├── n8n-data/
+│ ├── docker-compose.yml
+│ ├── .env.example
+│ ├── update_n8n.sh
+│ ├── install-and-migration.sh
+│ ├── manual-n8n-update-workflow.json
+│ ├── data/
+│ │ └── .gitkeep
+│ ├── postgres/
+│ │ └── .gitkeep
+├── README.md
+├── .gitignore
+```
 
 
 **.gitignore example:**
+```
 .env  
 n8n-data/data/  
 n8n-data/postgres/  
-*.sql  
-
+*.sql
+```
 
 ---
 
@@ -52,26 +54,56 @@ n8n-data/postgres/
 
 ---
 
-## 4. Upload Files, Remove `.gitkeep`, and Make Script Executable
+## 4. Upload Files, Remove `.gitkeep`, and Make `update_n8n.sh` Executable
+```
+# Check if unzip is installed, install if missing
+if ! command -v unzip &> /dev/null; then
+  sudo apt-get update
+  sudo apt-get install -y unzip
+fi
 
-- Download, unzip, and upload all files to `/home/runcloud/webapps/n8n/`.
-- Remove `.gitkeep` from `n8n-data/postgres/` (and optionally from `n8n-data/data/`).
-- Make `update_n8n.sh` executable.
+# Download the repo as a zip
+wget https://github.com/zeniusco/n8n-setup/archive/refs/heads/main.zip -O n8n-setup.zip
+
+# Unzip the archive
+unzip n8n-setup.zip
+
+# Copy all contents to your webapp directory (use sudo)
+sudo cp -r n8n-setup-main/* /home/runcloud/webapps/n8n/
+
+# Clean up the downloaded zip and extracted folder
+rm n8n-setup.zip
+rm -rf n8n-setup-main/
+
+# IMPORTANT: Remove .gitkeep (or any file) from the Postgres folder so the database can initialize
+sudo rm -f /home/runcloud/webapps/n8n/n8n-data/postgres/.gitkeep
+
+# (Optional: Also remove from data folder, though not required for n8n to work)
+sudo rm -f /home/runcloud/webapps/n8n/n8n-data/data/.gitkeep
+
+# Make update_n8n.sh executable
+sudo chmod +x /home/runcloud/webapps/n8n/n8n-data/update_n8n.sh
+```
 
 ---
 
 ## 5. Set File and Folder Ownership
 
-- In RunCloud dashboard: `Tools > Fix File and Folder Ownership`
+-   In the RunCloud dashboard, go to your `n8n` web app.
+-   Go to **Tools > Fix File and Folder Ownership**.
+-   Click the button to run the tool.
 
 ---
 
 ## 6. Secure Nginx Block for `n8n-data` Folder
 
-- Go to `Nginx Config > Add Custom Config`
-- Type: `location.root`
-- Filename: `deny-n8n-data`
-- Content:
+-   In RunCloud dashboard, go to your `n8n.zeniusco.com` web app.
+-   Go to **Nginx Config > Add Custom Config**.
+-   Set:
+    -   **Type:** `location.root`
+    -   **Filename:** `deny-n8n-data`
+    -   **Content:**
+
     ```nginx
     location ^~ /n8n-data/ {
         deny all;
@@ -84,34 +116,51 @@ n8n-data/postgres/
 
 ## 7. Configure Environment Variables
 
-- In RunCloud File Manager:
-  - Copy `.env.example` to `.env`
-  - Update:
-    - `N8N_BASIC_AUTH_USER=youruser`
-    - `N8N_BASIC_AUTH_PASSWORD=yourpassword`
-    - `N8N_HOST=sub.domain.com`
-    - `WEBHOOK_URL=https://sub.domain.com/`
-    - `N8N_ENCRYPTION_KEY=superlongrandomstring`
-    - `DB_POSTGRESDB_PASSWORD=supersecret`
-    - (Set other credentials as needed)
+In RunCloud **File Manager**:
+-   Copy `/home/runcloud/webapps/n8n/n8n-data/.env.example` to `.env`.
+-   **Edit `.env` and update:**
+```
+N8N_BASIC_AUTH_USER=youruser
+N8N_BASIC_AUTH_PASSWORD=yourpassword
+N8N_HOST=sub.domain.com
+WEBHOOK_URL=https://sub.domain.com/
+N8N_ENCRYPTION_KEY=superlongrandomstring
+DB_POSTGRESDB_PASSWORD=supersecret
+```
+- (Set other passwords/usernames as needed.)
 
 ---
 
 ## 8. Configure Nginx Proxy for n8n
 
-- Go to `Nginx Config` in RunCloud dashboard.
-- Under Predefined Config:
-    - Proxy: Effortlessly turn NGINX as a proxy server
-    - Type: `location.root`
-    - Config Name: `/etc/nginx-rc/extra.d/n8n.location.root.nginx-proxy.conf`
-    - Paste only the proxy directives (no `location / {}` wrapper).
+## **8\. Configure Nginx Proxy for n8n (RunCloud UI & Predefined Config)**
 
----
+1.  In your RunCloud dashboard, go to your `n8n.zeniusco.com` web app.
+2.  Go to **Nginx Config**.
+3.  Under **Predefined Config (Optional):**
+    -   Look for **Proxy: Effortlessly turn NGINX as a proxy server**
+    -   **Type:** `location.root`
+    -   **Config Name:** `/etc/nginx-rc/extra.d/n8n.location.root.nginx-proxy.conf`
+4.  **Edit `/etc/nginx-rc/extra.d/n8n.location.root.nginx-proxy.conf`** and paste in only these lines:
+```
+proxy_pass http://127.0.0.1:5678;
+proxy_set_header Host $host;
+proxy_set_header X-Real-IP $remote_addr;
+proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+proxy_set_header X-Forwarded-Proto $scheme;
+proxy_http_version 1.1;
+proxy_set_header Upgrade $http_upgrade;
+proxy_set_header Connection "upgrade";
+proxy_read_timeout 300s;
+```
+-   **Save the file.**
+-   **Click the “Reload Nginx” button in RunCloud** to apply your changes.
 
-## 9. Install Docker & Docker Compose (SSH)
 
-- SSH into your server.
-- Run:
+## **9\. Install Docker & Docker Compose (One-Time, SSH Step)**
+
+1.  SSH into your server.
+2.  Run:
     ```bash
     sudo bash /home/runcloud/webapps/n8n/n8n-data/install-and-migration.sh
     ```
@@ -151,12 +200,15 @@ n8n-data/postgres/
     ```bash
     PGPASSWORD=yourpassword pg_dump -U n8nuser -h 127.0.0.1 n8ndb > /home/runcloud/webapps/n8n/n8n-data/postgres/pg_backup_$(date +\%F).sql
     ```
+    - Replace yourpassword, n8nuser, and n8ndb with your actual DB credentials from .env.
 - Run As: `runcloud`
-- Schedule: `0 2 * * *` (or as preferred)
+- Schedule: `0 2 * * *` (every day at 2am, or any time you prefer)
 
-> **What is a logical PostgreSQL backup?**  
-> This creates a `.sql` file containing all n8n data (workflows, credentials, execution history, etc.)  
-> You can restore this file with `psql` to recover everything.
+#### **What is a logical PostgreSQL backup?**
+
+-   `pg_dump` creates a logical (SQL) backup of your PostgreSQL database, saving all your n8n data—including workflows, credentials, history, etc.—as a portable `.sql` file.
+-   You can restore this file on any PostgreSQL server using `psql` to recover all n8n data.
+
 
 ### 11C. Monitor and Restart n8n and PostgreSQL Containers
 
@@ -171,7 +223,14 @@ n8n-data/postgres/
     fi
     ```
 - Run As: `runcloud`
-- Schedule: `*/5 * * * *`
+- Schedule: `*/5 * * * *` (every 5 minutes)
+
+**What does this do?**
+
+-   This script checks if the n8n and PostgreSQL containers are running every 5 minutes.
+-   If either container is not running, it will automatically restart both by running `docker-compose up -d`.
+
+**Add each of these jobs separately in your RunCloud Cron Jobs UI, specifying the user and schedule for each.**
 
 ---
 
@@ -190,7 +249,10 @@ n8n-data/postgres/
     ```
     /usr/bin/systemctl start docker
     ```
+- Additional Supervisor config (Optional): (Leave blank)
 - Save the Supervisor job.
+
+**This ensures Docker is monitored and automatically restarted if it ever stops.**
 
 **B. Notifications:**
 - In RunCloud > Integrations > Notifications:
@@ -279,35 +341,64 @@ n8n-data/postgres/
 > **Follow this step ONLY when restoring from backup or moving to a new server.
 > Skip for a new installation.**
 
-**A. Complete all steps above first on your new server.**
+### **A. Complete All Steps Above First**
 
-**B. Restore your backup of `/home/runcloud/webapps/n8n/` to the same path.**
+-   Do all setup steps 1–13 (new web app, SSL, Docker, configs, etc.) on the new server.
 
--   Includes:
-    -   `/n8n-data/` (all files, folders, volumes)
-    -   `.env`, compose, scripts, etc.
--   Set file ownerships via RunCloud tool.
--   Remove `.gitkeep` from `postgres/`.
+### **B. Restore Your Files and Data**
 
-**C. Review configs (`.env`, `docker-compose.yml`).**
+**Restore your backup of `/home/runcloud/webapps/n8n/` to the same path on the new server.**
+    -   Includes:
+        -   `/n8n-data/` (all files and folders)
+        -   `.env` file
+        -   Docker Compose file, scripts, workflows, etc.
+        -   Docker volumes:
+            -   `n8n-data/data/` (workflows, credentials, config)
+            -   `n8n-data/postgres/` (PostgreSQL data)
+    -   Transfer via `rsync`, `scp`, SFTP, or RunCloud backup restore.
+-   **Set ownerships with RunCloud “Fix File and Folder Ownership” tool.**
+-   **Remove any `.gitkeep` files from the `postgres` directory:**
+-   ```sudo rm -f /home/runcloud/webapps/n8n/n8n-data/postgres/.gitkeep```
 
-**D. Start containers as runcloud user:**
+
+### **C. Review Configs**
+-   Double-check `.env` and `docker-compose.yml` for correct domains, credentials, etc.
+
+### **D. Start Containers**
+
+1.  **Switch to `runcloud` user:**
 ```
 sudo -i -u runcloud
 cd /home/runcloud/webapps/n8n/n8n-data/
+```
+
+2.  **Start containers:**
+```
 docker-compose up -d
 ```
-- Check with docker-compose ps and logs.
 
-**E. Test your site at [https://sub.domain.com](https://sub.domain.com)**
+3.  **Check status:**
+```
+docker-compose ps
+docker-compose logs n8n
+docker-compose logs n8n-postgres
+```
 
-**F. Re-create cron jobs, Supervisor, notifications if missing.**
+### **E. Test Your Site**
 
-**G. Update DNS if needed.**
+-   Visit [https://n8n.zeniusco.com](https://n8n.zeniusco.com) and log in to n8n.
 
-## 15\. Security Best Practices
 
--   Never store secrets in `/public/`
+### **F. Re-create Cron Jobs, Supervisor, and Notifications (if not included in backup)**
+
+-   Double-check all scheduled tasks, Supervisor jobs, and notifications in RunCloud.
+
+### **G. Update DNS if needed**
+
+
+## **15\. Security Best Practices**
+
+-   Never store secrets in `/public/` (no longer present)
 -   Use strong credentials in `.env`
 -   Regularly test backup and restore
 -   Keep RunCloud, Docker, and n8n updated
