@@ -13,6 +13,7 @@ n8n-setup/
 │ ├── .env.example
 │ ├── update_n8n.sh
 │ ├── install-and-migration.sh
+│ ├── monitor-containers.sh
 │ ├── manual-n8n-update-workflow.json
 │ ├── data/
 │ │ └── .gitkeep
@@ -83,6 +84,7 @@ sudo rm -f /home/runcloud/webapps/n8n/n8n-data/data/.gitkeep
 
 # Make update_n8n.sh executable
 sudo chmod +x /home/runcloud/webapps/n8n/n8n-data/update_n8n.sh
+sudo chmod +x /home/runcloud/webapps/n8n/n8n-data/monitor-containers.sh
 ```
 
 ---
@@ -213,12 +215,7 @@ proxy_read_timeout 300s;
 - Job Name: `n8n container monitor`
 - Command:
     ```bash
-    N8N_STATUS=$(docker ps --filter "name=n8n" --filter "status=running" --format "{{.Names}}")
-    PG_STATUS=$(docker ps --filter "name=postgres" --filter "status=running" --format "{{.Names}}")
-    if [ -z "$N8N_STATUS" ] || [ -z "$PG_STATUS" ]; then
-      cd /home/runcloud/webapps/n8n/n8n-data/
-      docker-compose up -d
-    fi
+/home/runcloud/webapps/n8n/n8n-data/monitor-containers.sh
     ```
 - Run As: `runcloud`
 - Schedule: `*/5 * * * *` (every 5 minutes)
