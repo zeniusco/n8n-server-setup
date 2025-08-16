@@ -215,7 +215,7 @@ proxy_read_timeout 300s;
 - Job Name: `n8n container monitor`
 - Command:
     ```bash
-/home/runcloud/webapps/n8n/n8n-data/monitor-containers.sh
+    /home/runcloud/webapps/n8n/n8n-data/monitor-containers.sh
     ```
 - Run As: `runcloud`
 - Schedule: `*/5 * * * *` (every 5 minutes)
