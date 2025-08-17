@@ -353,6 +353,25 @@ f=/home/runcloud/webapps/n8n/n8n-data/fix_n8n_permissions.sh;e=you@email.com;[ -
 -   Save the settings.
 
 ---
+
+## Tips: What To Do If You Update `docker-compose.yml`, `.env`, or Nginx `.conf` Files
+
+### If you update `docker-compose.yml` or `.env`:
+You must restart Docker containers so changes take effect.
+
+**How to do it (via SSH):**
+```
+sudo -i -u runcloud
+cd /home/runcloud/webapps/n8n/n8n-data/
+docker-compose up -d
+```
+
+### If you update your Nginx `.conf` file:
+You must reload Nginx for changes to apply.
+
+-   Go to your web app in the RunCloud dashboard.
+-   Click the “Reload Nginx” button.
+
 ## Secure Manual Update Workflow in n8n
 
 - Import this JSON workflow into n8n (replace user/pass as needed):
@@ -488,27 +507,10 @@ docker-compose logs n8n-postgres
 ### **G. Update DNS if needed with new server IP**
 
 
-## **15\. Security Best Practices**
+## **Security Best Practices**
 
 -   Never store secrets in `/public/` (no longer present)
 -   Use strong credentials in `.env`
 -   Regularly test backup and restore
 -   Keep RunCloud, Docker, and n8n updated
 
-## Tips: What To Do If You Update `docker-compose.yml`, `.env`, or Nginx `.conf` Files
-
-### If you update `docker-compose.yml` or `.env`:
-You must restart Docker containers so changes take effect.
-
-**How to do it (via SSH):**
-```
-sudo -i -u runcloud
-cd /home/runcloud/webapps/n8n/n8n-data/
-docker-compose up -d
-```
-
-### If you update your Nginx `.conf` file:
-You must reload Nginx for changes to apply.
-
--   Go to your web app in the RunCloud dashboard.
--   Click the “Reload Nginx” button.
