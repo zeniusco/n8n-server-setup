@@ -60,7 +60,7 @@ n8n-data/postgres/
 
 ---
 
-## 4. Upload Files, Remove `.gitkeep`, and Make `update_n8n.sh` Executable
+## 4. Upload Files, Remove `.gitkeep`, and Make scripts Executable
 ```
 # Check if unzip is installed, install if missing
 if ! command -v unzip &> /dev/null; then
@@ -94,7 +94,7 @@ sudo chmod +x /home/runcloud/webapps/n8n/n8n-data/install-and-migration.sh
 sudo chmod +x /home/runcloud/webapps/n8n/n8n-data/fix_n8n_permissions.sh
 ```
 
-# Install dos2unix (for line ending fixes):
+## Install dos2unix (for line ending fixes):
 ```
 sudo apt-get install dos2unix
 ```
