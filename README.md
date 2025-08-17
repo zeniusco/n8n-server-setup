@@ -130,8 +130,8 @@ sudo apt-get install dos2unix
 ## 7. Configure Environment Variables
 
 In RunCloud **File Manager**:
--   Copy `/home/runcloud/webapps/n8n/n8n-data/.env.example` to `.env`.
--   **Edit `.env` and update:**
+- Copy `/home/runcloud/webapps/n8n/n8n-data/.env.example` to `.env`.
+- **Edit `.env` and update following:**
 ```
 N8N_BASIC_AUTH_USER=youruser
 N8N_BASIC_AUTH_PASSWORD=yourpassword
@@ -172,14 +172,12 @@ proxy_set_header Upgrade $http_upgrade;
 proxy_set_header Connection "upgrade";
 proxy_read_timeout 300s;
 ```
--   **Save the file.**
--   **Click the “Reload Nginx” button in RunCloud** to apply your changes.
+- **Save the file.**
+- **Click the “Reload Nginx” button in RunCloud** to apply the changes.
 
 
 ## **9\. Install Docker & Docker Compose (One-Time, SSH Step)**
 
-1.  SSH into your server.
-2.  Run:
     ```bash
     sudo bash /home/runcloud/webapps/n8n/n8n-data/install-and-migration.sh
     ```
@@ -187,9 +185,7 @@ proxy_read_timeout 300s;
 ---
 
 ## 10. Start PostgreSQL & n8n (SSH as runcloud user)
-
-- SSH into your server.
-- Switch to the `runcloud` user:
+  
     ```bash
     sudo -i -u runcloud
     cd /home/runcloud/webapps/n8n/n8n-data/
@@ -294,7 +290,6 @@ f=/home/runcloud/webapps/n8n/n8n-data/fix_n8n_permissions.sh;e=you@email.com;[ -
 - Schedule: `*/5 * * * *` (every 5 minutes)
 
 **What does this do?**
-
 -   This script checks if the n8n and PostgreSQL containers are running every 5 minutes.
 -   If either container is not running, it will automatically restart both by running `docker-compose up -d`.
 
@@ -318,7 +313,7 @@ f=/home/runcloud/webapps/n8n/n8n-data/fix_n8n_permissions.sh;e=you@email.com;[ -
 **A. Enable RunCloud’s Log Monitoring Features:**
 
 1.  **Go to your n8n web app in the RunCloud dashboard.**
-2.  **Navigate to the “Monitoring” section (or “Logs & Analytics” tab).**
+2.  **Navigate to the “Monitoring” section**
 3.  **Enable the following features:**
     -   **Top Path** – to see your most frequently accessed URLs/routes.
     -   **IP Address Hit** – to monitor which IPs are making the most requests.
@@ -440,7 +435,7 @@ f=/home/runcloud/webapps/n8n/n8n-data/fix_n8n_permissions.sh;e=you@email.com;[ -
 
 ### **A. Complete All Steps Above First**
 
--   Do all setup steps 1–13 (new web app, SSL, Docker, configs, etc.) on the new server.
+-   Do all setup steps 1–12 (new web app, SSL, Docker, configs, cronjobs etc.) on the new server.
 
 ### **B. Restore Your Files and Data**
 
@@ -488,9 +483,9 @@ docker-compose logs n8n-postgres
 
 ### **F. Re-create Cron Jobs, Supervisor, and Notifications (if not included in backup)**
 
--   Double-check all scheduled tasks, Supervisor jobs, and notifications in RunCloud.
+-   Double-check all cronjobs and notifications in RunCloud.
 
-### **G. Update DNS if needed**
+### **G. Update DNS if needed with new server IP**
 
 
 ## **15\. Security Best Practices**
@@ -503,7 +498,6 @@ docker-compose logs n8n-postgres
 ## Tips: What To Do If You Update `docker-compose.yml`, `.env`, or Nginx `.conf` Files
 
 ### If you update `docker-compose.yml` or `.env`:
-
 You must restart Docker containers so changes take effect.
 
 **How to do it (via SSH):**
@@ -512,18 +506,9 @@ sudo -i -u runcloud
 cd /home/runcloud/webapps/n8n/n8n-data/
 docker-compose up -d
 ```
-### If you update your Nginx `.conf` file:
 
+### If you update your Nginx `.conf` file:
 You must reload Nginx for changes to apply.
 
 -   Go to your web app in the RunCloud dashboard.
 -   Click the “Reload Nginx” button.
-
-|File Changed|What To Do After Change|Where to do it|
-|:----|:----|:----|
-|docker-compose.yml|SSH as runcloud, run docker-compose up -d|SSH terminal|
-|.env|SSH as runcloud, run docker-compose up -d|SSH terminal|
-|Nginx config|Click “Reload Nginx” in RunCloud UI|RunCloud dashboard|
-
-
-
