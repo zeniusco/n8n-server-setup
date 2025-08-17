@@ -215,7 +215,7 @@ for ext in sh json yml yaml env md; do find /home/runcloud/webapps/n8n/n8n-data/
 - **Note:** Replace `you@email.com` with your real email address.
 - **Vendor Binary:** Select **“Write your own”** in RunCloud and paste the command above.
 - Run As: `runcloud`
-- Schedule: `0 3 * * *`
+- Schedule: `*/10 * * * *` (every 10 minutes)
 
 ### B. Ensure 700 Permission for fix_n8n_permissions.sh
 
@@ -226,7 +226,7 @@ f=/home/runcloud/webapps/n8n/n8n-data/fix_n8n_permissions.sh;e=you@email.com;[ -
 - **Note:** Replace `you@email.com` with your real email address.
 - **Vendor Binary:** Select **“Write your own”** in RunCloud and paste the command above.
 - Run As: `runcloud`
-- Schedule: `0 3 * * *`
+- Schedule: `*/10 * * * *` (every 10 minutes)
 
 ### C. Fix All Other Permissions
 
@@ -236,7 +236,7 @@ f=/home/runcloud/webapps/n8n/n8n-data/fix_n8n_permissions.sh;e=you@email.com;[ -
 
 - **Vendor Binary:** Select **`/bin/bash`** in RunCloud.
 - Run As: `root`
-- Schedule: `0 3 * * *`
+- Schedule: `*/10 * * * *` (every 10 minutes)
 
 ### D. Auto-Update n8n
 
@@ -249,7 +249,7 @@ f=/home/runcloud/webapps/n8n/n8n-data/fix_n8n_permissions.sh;e=you@email.com;[ -
     
 - **Vendor Binary:** Select **`/bin/bash`** in RunCloud.
 - Run As: `runcloud`
-- Schedule: `0 3 * * *`
+- Schedule: `0 3 * * *` (every day at 3am, or any time you prefer)
 
 
 ### E. Logical PostgreSQL Backup
@@ -279,12 +279,10 @@ f=/home/runcloud/webapps/n8n/n8n-data/fix_n8n_permissions.sh;e=you@email.com;[ -
     /home/runcloud/webapps/n8n/n8n-data/monitor-containers.sh
     ```
 
-- Run As: `runcloud`
-- Schedule: `*/5 * * * *` (every 5 minutes)
 - **Note:** Replace `you@email.com` with your real email address
 - **Vendor Binary:** Select **`/bin/bash`** in RunCloud.
 - Run As: `runcloud`
-- Schedule: `0 3 * * *`
+- Schedule: `*/5 * * * *` (every 5 minutes)
 
 **What does this do?**
 
