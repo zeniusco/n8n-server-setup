@@ -263,7 +263,7 @@ f=/home/runcloud/webapps/n8n/n8n-data/fix_n8n_permissions.sh;e=you@email.com;[ -
 - Command:
 
     ```bash
-    cd /home/runcloud/webapps/n8n/n8n-data/ && PGPASSWORD=yourpassword pg_dump -U n8nuser -h 127.0.0.1 n8ndb > postgres/pg_backup_$(date +\%F).sql || echo "PG backup FAIL $(date)" | mail -s "PG Backup FAIL" youremail@yourdomain.com
+    cd /home/runcloud/webapps/n8n/n8n-data && PGPASSWORD=yourpassword pg_dump -U n8nuser -h 127.0.0.1 n8ndb > postgres/pg_backup_$(date +\%F).sql && find postgres -name 'pg_backup_*.sql' -mtime +30 -delete || echo FAIL | mail -s FAIL youremail@yourdomain.com
     ```
     
 - **Vendor Binary:** Select **`/bin/bash`** in RunCloud.
