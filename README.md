@@ -253,7 +253,7 @@ f=/home/runcloud/webapps/n8n/n8n-data/fix_n8n_permissions.sh;e=you@email.com;[ -
 - Command:
 
     ```bash
-    cd /home/runcloud/webapps/n8n/n8n-data/ && docker-compose pull n8n && docker-compose up -d n8n || echo "n8n update FAIL $(date)" | mail -s "n8n Update FAIL" youremail@yourdomain.com
+    cd /home/runcloud/webapps/n8n/n8n-data/ && docker-compose pull n8n && docker-compose up -d n8n && echo "$(date) OK" | mail -s "n8n Update SUCCESS" admin@zenius.co || echo "$(date) FAIL" | mail -s "n8n Update FAIL" admin@zenius.co
     ```
     
 - **Vendor Binary:** Select **`/bin/bash`** in RunCloud.
