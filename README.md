@@ -43,6 +43,10 @@ n8n-data/postgres/
 - Web Application Name: `n8n`
 - Root Path: `/home/runcloud/webapps/n8n/`
 - Create Application
+- **Enable RunCloud Backup for this web app**:
+-   Go to **Backups** in the RunCloud dashboard.
+-   Add a backup job targeting `/home/runcloud/webapps/n8n/`.
+-   Set schedule and retention as desired.
 
 ---
 
@@ -128,6 +132,14 @@ N8N_HOST=sub.domain.com
 WEBHOOK_URL=https://sub.domain.com/
 N8N_ENCRYPTION_KEY=superlongrandomstring
 DB_POSTGRESDB_PASSWORD=supersecret
+
+# SMTP settings for Send Email node
+N8N_SMTP_HOST=smtp.example.com
+N8N_SMTP_USER=your@email.com
+N8N_SMTP_PASS=yourpassword
+N8N_SMTP_SENDER=your@email.com
+N8N_SMTP_PORT=587
+N8N_SMTP_SSL=false
 ```
 - (Set other passwords/usernames as needed.)
 
@@ -183,12 +195,15 @@ proxy_read_timeout 300s;
 
 ## 11. Set Up Cron Jobs (For Recurring Tasks)
 
+## Before you being this step: make sure you have followed this repo: [https://github.com/zeniusco/server-email-setup](https://github.com/zeniusco/server-email-setup) and installed server-wide mail system.
+
 ### 11A. Auto-Update n8n
 
 - Job Name: `n8n auto-update`
 - Command:
     ```bash
-    cd /home/runcloud/webapps/n8n/n8n-data/ && docker-compose pull n8n && docker-compose up -d n8n
+    cd /home/runcloud/webapps/n8n/n8n-data/ && docker-compose pull n8n && docker-compose up -d n8n || echo "n8n update FAIL $(date)" | mail -s "n8n Update FAIL" youremail@yourdomain.com
+
     ```
 - Run As: `runcloud`
 - Schedule: `0 3 * * *`
@@ -198,7 +213,8 @@ proxy_read_timeout 300s;
 - Job Name: `n8n postgres backup`
 - Command:
     ```bash
-    PGPASSWORD=yourpassword pg_dump -U n8nuser -h 127.0.0.1 n8ndb > /home/runcloud/webapps/n8n/n8n-data/postgres/pg_backup_$(date +\%F).sql
+    cd /home/runcloud/webapps/n8n/n8n-data/ && PGPASSWORD=yourpassword pg_dump -U n8nuser -h 127.0.0.1 n8ndb > postgres/pg_backup_$(date +\%F).sql || echo "PG backup FAIL $(date)" | mail -s "PG Backup FAIL" youremail@yourdomain.com
+
     ```
     - Replace yourpassword, n8nuser, and n8ndb with your actual DB credentials from .env.
 - Run As: `runcloud`
@@ -256,7 +272,31 @@ proxy_read_timeout 300s;
 
 ---
 
-## 13. Secure Manual Update Workflow in n8n
+## 14. Create an Error Trigger Node in n8n to send all workflow failure email notification
+
+**Step 1: Add the Error Trigger Node**
+
+-   Add the **Error Trigger** node as the first node.
+    -   This node is triggered **automatically** when any workflow (that references this error workflow) fails.
+
+**Step 2: Add the Send Email Node**
+
+-   Add a **Send Email** node connected to the Error Trigger node.
+-   Configure it
+
+**Step 3: Save the Workflow**
+
+-   Save and **activate** the workflow.
+
+**Step 4: Link This Error Workflow to Other Workflows**
+
+-   Open any workflow you want monitored.
+-   Go to **Workflow Settings** (top right ⚙️).
+-   Set the **Error Workflow** to the error handler workflow you just created.
+-   Save the settings.
+
+---
+## Secure Manual Update Workflow in n8n
 
 - Import this JSON workflow into n8n (replace user/pass as needed):
 
@@ -331,7 +371,7 @@ proxy_read_timeout 300s;
 - Set strong credentials for the webhook node.
 - Activate the workflow.
 
-## 14\. Migration/Restore — ONLY for Restoring Old/Existing Files or Databases on a New Server
+## Migration/Restore — ONLY for Restoring Old/Existing Files or Databases on a New Server
 
 > **Follow this step ONLY when restoring from backup or moving to a new server.
 > Skip for a new installation.**
