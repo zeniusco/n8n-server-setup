@@ -298,6 +298,19 @@ f=/home/runcloud/webapps/n8n/n8n-data/fix_n8n_permissions.sh;e=you@email.com;[ -
 -   This script checks if the n8n and PostgreSQL containers are running every 5 minutes.
 -   If either container is not running, it will automatically restart both by running `docker-compose up -d`.
 
+### G. Docker Restart
+- Job Name: `docker restart`
+- Command:
+  
+    ```bash
+    if ! pgrep dockerd > /dev/null; then service docker start || echo "Docker could not be started on $(hostname) at $(date)" | mail -s "Docker restart FAIL" admin@zenius.co; fi
+    ```
+
+- **Note:** Replace `you@email.com` with your real email address
+- **Vendor Binary:** Write your own
+- Run As: `root`
+- Schedule: `*/5 * * * *` (every 5 minutes)
+
 ---
 
 ## 12. Log Monitoring & Notifications
