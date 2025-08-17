@@ -110,7 +110,7 @@ sudo apt-get install dos2unix
 
 ## 6. Secure Nginx Block for `n8n-data` Folder
 
--   In RunCloud dashboard, go to your `n8n.zeniusco.com` web app.
+-   In RunCloud dashboard, go to your `n8n` web app.
 -   Go to **Nginx Config > Add Custom Config**.
 -   Set:
     -   **Type:** `location.root`
@@ -154,7 +154,7 @@ N8N_SMTP_SSL=false
 
 ## 8. Configure Nginx Proxy for n8n
 
-1.  In your RunCloud dashboard, go to your `n8n.zeniusco.com` web app.
+1.  In your RunCloud dashboard, go to your `n8n` web app.
 2.  Go to **Nginx Config**.
 3.  Under **Predefined Config (Optional):**
     -   Look for **Proxy: Effortlessly turn NGINX as a proxy server**
@@ -253,7 +253,7 @@ f=/home/runcloud/webapps/n8n/n8n-data/fix_n8n_permissions.sh;e=you@email.com;[ -
 - Command:
 
     ```bash
-    cd /home/runcloud/webapps/n8n/n8n-data/ && docker-compose pull n8n && docker-compose up -d n8n && echo "$(date) OK" | mail -s "n8n Update SUCCESS" admin@zenius.co || echo "$(date) FAIL" | mail -s "n8n Update FAIL" admin@zenius.co
+    cd /home/runcloud/webapps/n8n/n8n-data/ && docker-compose pull n8n && docker-compose up -d n8n && echo "$(date) OK" | mail -s "n8n Update SUCCESS" youremail@yourdomain.com|| echo "$(date) FAIL" | mail -s "n8n Update FAIL" youremail@yourdomain.com
     ```
     
 - **Vendor Binary:** Select **`/bin/bash`** in RunCloud.
@@ -303,7 +303,7 @@ f=/home/runcloud/webapps/n8n/n8n-data/fix_n8n_permissions.sh;e=you@email.com;[ -
 - Command:
   
     ```bash
-    if ! pgrep dockerd > /dev/null; then service docker start || echo "Docker could not be started on $(hostname) at $(date)" | mail -s "Docker restart FAIL" admin@zenius.co; fi
+    if ! pgrep dockerd > /dev/null; then service docker start || echo "Docker could not be started on $(hostname) at $(date)" | mail -s "Docker restart FAIL" youremail@yourdomain.com; fi
     ```
 
 - **Note:** Replace `you@email.com` with your real email address
@@ -483,7 +483,7 @@ docker-compose logs n8n-postgres
 
 ### **E. Test Your Site**
 
--   Visit [https://n8n.zeniusco.com](https://n8n.zeniusco.com) and log in to n8n.
+-   Visit https://sub.domain.com and log in to n8n.
 
 
 ### **F. Re-create Cron Jobs, Supervisor, and Notifications (if not included in backup)**
