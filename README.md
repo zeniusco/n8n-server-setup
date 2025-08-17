@@ -272,7 +272,7 @@ proxy_read_timeout 300s;
 
 ---
 
-## 14. Create an Error Trigger Node in n8n to send all workflow failure email notification
+## 13. Create an Error Trigger Node in n8n to send all workflow failure email notification
 
 **Step 1: Add the Error Trigger Node**
 
