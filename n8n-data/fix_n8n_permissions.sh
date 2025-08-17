@@ -6,7 +6,7 @@ DATE="$(date)"
 DATA_DIR="/home/runcloud/webapps/n8n/n8n-data"
 
 # Fix ownership first
-chown -R runcloud:runcloud "$DATA_DIR" || echo "CHOWN FAILED for $DATA_DIR on $HOST at $DATE" | mail -s "n8n chown FAILED" "$EMAIL"
+/usr/bin/chown -R runcloud:runcloud "$DATA_DIR" || echo "CHOWN FAILED for $DATA_DIR on $HOST at $DATE" | /usr/bin/mail -s "n8n chown FAILED" "$EMAIL"
 
 # Array of items and their desired permissions
 declare -A items=(
@@ -24,8 +24,8 @@ declare -A items=(
 for item in "${!items[@]}"; do
   perm="${items[$item]}"
   if [[ -e "$item" ]]; then
-    chmod "$perm" "$item" || echo "CHMOD FAILED: $item to $perm on $HOST at $DATE" | mail -s "n8n chmod FAILED: $item" "$EMAIL"
+    /usr/bin/chmod "$perm" "$item" || echo "CHMOD FAILED: $item to $perm on $HOST at $DATE" | /usr/bin/mail -s "n8n chmod FAILED: $item" "$EMAIL"
   else
-    echo "MISSING: $item on $HOST at $DATE" | mail -s "n8n MISSING: $item" "$EMAIL"
+    echo "MISSING: $item on $HOST at $DATE" | /usr/bin/mail -s "n8n MISSING: $item" "$EMAIL"
   fi
 done
