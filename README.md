@@ -14,6 +14,7 @@ n8n-setup/
 │ ├── update_n8n.sh
 │ ├── install-and-migration.sh
 │ ├── monitor-containers.sh
+│ ├── fix_n8n_permissions.sh
 │ ├── manual-n8n-update-workflow.json
 │ ├── data/
 │ │ └── .gitkeep
