@@ -204,71 +204,92 @@ proxy_read_timeout 300s;
 
 ## Before you being this step: make sure you have followed this repo: [https://github.com/zeniusco/server-email-setup](https://github.com/zeniusco/server-email-setup) and installed server-wide mail system.
 
+## Add each of these cron jobs separately in your RunCloud Cron Jobs UI, specifying the user and schedule for each.
+
 ### A. Fix Line Endings for All Text Files
+
 ```
 for ext in sh json yml yaml env md; do find /home/runcloud/webapps/n8n/n8n-data/ -type f -name "*.$ext" -exec dos2unix {} \; || echo "$ext dos2unix failed" | mail -s "dos2unix fail" you@email.com; done
 ```
--   **Note:** Replace `you@email.com` with your real email address.
--   **Vendor Binary:** Select **“Write your own”** in RunCloud and paste the command above.
+
+- **Note:** Replace `you@email.com` with your real email address.
+- **Vendor Binary:** Select **“Write your own”** in RunCloud and paste the command above.
+- Run As: `runcloud`
+- Schedule: `0 3 * * *`
 
 ### B. Ensure 700 Permission for fix_n8n_permissions.sh
+
 ```
-f=/home/runcloud/webapps/n8n/n8n-data/fix_n8n_permissions.sh;e=you@email.com;[ -e $f ]&&/usr/bin/chmod 700 $f||echo "$f:chmodfail" |/usr/bin/mail -s "chmodfail" $e;[ -e $f ]||echo "$f:missing"|/usr/bin/mail -s "missing" $e
+f=/home/runcloud/webapps/n8n/n8n-data/fix_n8n_permissions.sh;e=you@email.com;[ -e $f ]&&/usr/bin/chmod 700 $f||echo "$f:chmodfail" |/usr/bin/mail -s "chmodfail" $e;[-e $f ]||echo "$f:missing"|/usr/bin/mail -s "missing" $e
 ```
--   **Note:** Replace `you@email.com` with your real email address.
--   **Vendor Binary:** Select **“Write your own”** in RunCloud and paste the command above.
+
+- **Note:** Replace `you@email.com` with your real email address.
+- **Vendor Binary:** Select **“Write your own”** in RunCloud and paste the command above.
+- Run As: `runcloud`
+- Schedule: `0 3 * * *`
 
 ### C. Fix All Other Permissions
+
 ```
 /home/runcloud/webapps/n8n/n8n-data/fix_n8n_permissions.sh
 ```
--  **Vendor Binary:** Select **`/bin/bash`** in RunCloud.
+
+- **Vendor Binary:** Select **`/bin/bash`** in RunCloud.
+- Run As: `root`
+- Schedule: `0 3 * * *`
 
 ### D. Auto-Update n8n
 
 - Job Name: `n8n auto-update`
 - Command:
+
     ```bash
     cd /home/runcloud/webapps/n8n/n8n-data/ && docker-compose pull n8n && docker-compose up -d n8n || echo "n8n update FAIL $(date)" | mail -s "n8n Update FAIL" youremail@yourdomain.com
-
     ```
+    
+- **Vendor Binary:** Select **`/bin/bash`** in RunCloud.
 - Run As: `runcloud`
 - Schedule: `0 3 * * *`
+
 
 ### E. Logical PostgreSQL Backup
 
 - Job Name: `n8n postgres backup`
 - Command:
+
     ```bash
     cd /home/runcloud/webapps/n8n/n8n-data/ && PGPASSWORD=yourpassword pg_dump -U n8nuser -h 127.0.0.1 n8ndb > postgres/pg_backup_$(date +\%F).sql || echo "PG backup FAIL $(date)" | mail -s "PG Backup FAIL" youremail@yourdomain.com
-
     ```
-    - Replace yourpassword, n8nuser, and n8ndb with your actual DB credentials from .env.
+    
+- **Vendor Binary:** Select **`/bin/bash`** in RunCloud.
+- **Note:** Replace `you@email.com` with your real email address
+- **Note:** Replace yourpassword, n8nuser, and n8ndb with your actual DB credentials from .env.
 - Run As: `runcloud`
 - Schedule: `0 2 * * *` (every day at 2am, or any time you prefer)
 
 #### **What is a logical PostgreSQL backup?**
-
--   `pg_dump` creates a logical (SQL) backup of your PostgreSQL database, saving all your n8n data—including workflows, credentials, history, etc.—as a portable `.sql` file.
--   You can restore this file on any PostgreSQL server using `psql` to recover all n8n data.
-
+- `pg_dump` creates a logical (SQL) backup of your PostgreSQL database, saving all your n8n data—including workflows, credentials, history, etc.—as a portable `.sql` file.
+- You can restore this file on any PostgreSQL server using `psql` to recover all n8n data.
 
 ### F. Monitor and Restart n8n and PostgreSQL Containers
-
 - Job Name: `n8n container monitor`
 - Command:
+  
     ```bash
     /home/runcloud/webapps/n8n/n8n-data/monitor-containers.sh
     ```
+
 - Run As: `runcloud`
 - Schedule: `*/5 * * * *` (every 5 minutes)
+- **Note:** Replace `you@email.com` with your real email address
+- **Vendor Binary:** Select **`/bin/bash`** in RunCloud.
+- Run As: `runcloud`
+- Schedule: `0 3 * * *`
 
 **What does this do?**
 
 -   This script checks if the n8n and PostgreSQL containers are running every 5 minutes.
 -   If either container is not running, it will automatically restart both by running `docker-compose up -d`.
-
-**Add each of these jobs separately in your RunCloud Cron Jobs UI, specifying the user and schedule for each.**
 
 ---
 
@@ -283,10 +304,12 @@ f=/home/runcloud/webapps/n8n/n8n-data/fix_n8n_permissions.sh;e=you@email.com;[ -
   - Auto Restart: Enabled
   - Auto Start: Enabled
   - Numprocs: `1`
-  - Command:  
+  - Command:
+  
     ```
     /usr/bin/systemctl start docker
     ```
+  
 - Additional Supervisor config (Optional): (Leave blank)
 - Save the Supervisor job.
 
