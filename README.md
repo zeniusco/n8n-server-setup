@@ -300,34 +300,9 @@ f=/home/runcloud/webapps/n8n/n8n-data/fix_n8n_permissions.sh;e=you@email.com;[ -
 
 ---
 
-## 12. Monitoring & Notifications
-
-**A. Supervisor for Docker (recommended):**
-
-- In RunCloud, go to your `n8n` web app > Supervisor.
-- Add New Supervisor Job:
-  - Job Name: `docker`
-  - Run As: `runcloud`
-  - Auto Restart: Enabled
-  - Auto Start: Enabled
-  - Numprocs: `1`
-  - Command:
-  
-    ```
-    /usr/bin/systemctl start docker
-    ```
-  
-- Additional Supervisor config (Optional): (Leave blank)
-- Save the Supervisor job.
-
-**This ensures Docker is monitored and automatically restarted if it ever stops.**
-
-**B. Notifications:**
-- In RunCloud > Integrations > Notifications:
-  - Add your preferred channel (email, Slack, etc.)
-  - Enable notifications for Supervisor events, backups, and server issues.
+## 12. Log Monitoring & Notifications
  
-**Enable RunCloud’s Log Monitoring Features**
+**A. Enable RunCloud’s Log Monitoring Features:**
 
 1.  **Go to your n8n web app in the RunCloud dashboard.**
 2.  **Navigate to the “Monitoring” section (or “Logs & Analytics” tab).**
@@ -338,6 +313,11 @@ f=/home/runcloud/webapps/n8n/n8n-data/fix_n8n_permissions.sh;e=you@email.com;[ -
 4.  **For Slow Script:**
     -   **Set the threshold to `1 second`** (recommended to catch even brief slowdowns).
     -   Adjust higher if you see too many false positives.
+  
+**B. Notifications:**
+- In RunCloud > Integrations > Notifications:
+  - Add your preferred channel (email, Slack, etc.)
+  - Enable notifications for Supervisor events, backups, and server issues.
 
 ---
 
