@@ -326,6 +326,18 @@ f=/home/runcloud/webapps/n8n/n8n-data/fix_n8n_permissions.sh;e=you@email.com;[ -
 - In RunCloud > Integrations > Notifications:
   - Add your preferred channel (email, Slack, etc.)
   - Enable notifications for Supervisor events, backups, and server issues.
+ 
+**Enable RunCloud’s Log Monitoring Features**
+
+1.  **Go to your n8n web app in the RunCloud dashboard.**
+2.  **Navigate to the “Monitoring” section (or “Logs & Analytics” tab).**
+3.  **Enable the following features:**
+    -   **Top Path** – to see your most frequently accessed URLs/routes.
+    -   **IP Address Hit** – to monitor which IPs are making the most requests.
+    -   **Slow Script** – to catch slow requests and performance issues.
+4.  **For Slow Script:**
+    -   **Set the threshold to `1 second`** (recommended to catch even brief slowdowns).
+    -   Adjust higher if you see too many false positives.
 
 ---
 
