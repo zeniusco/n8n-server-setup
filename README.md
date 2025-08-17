@@ -208,6 +208,9 @@ proxy_read_timeout 300s;
 
 ### A. Fix Line Endings for All Text Files
 
+- Job Name: `auto fix line endings`
+- Command:
+
 ```
 for ext in sh json yml yaml env md; do find /home/runcloud/webapps/n8n/n8n-data/ -type f -name "*.$ext" -exec dos2unix {} \; || echo "$ext dos2unix failed" | mail -s "dos2unix fail" you@email.com; done
 ```
@@ -219,6 +222,9 @@ for ext in sh json yml yaml env md; do find /home/runcloud/webapps/n8n/n8n-data/
 
 ### B. Ensure 700 Permission for fix_n8n_permissions.sh
 
+- Job Name: `chmod 700 fix_n8n_permissions`
+- Command:
+
 ```
 f=/home/runcloud/webapps/n8n/n8n-data/fix_n8n_permissions.sh;e=you@email.com;[ -e $f ]&&/usr/bin/chmod 700 $f||echo "$f:chmodfail" |/usr/bin/mail -s "chmodfail" $e;[-e $f ]||echo "$f:missing"|/usr/bin/mail -s "missing" $e
 ```
@@ -229,6 +235,9 @@ f=/home/runcloud/webapps/n8n/n8n-data/fix_n8n_permissions.sh;e=you@email.com;[ -
 - Schedule: `*/10 * * * *` (every 10 minutes)
 
 ### C. Fix All Other Permissions
+
+- Job Name: `chmod permission fix all`
+- Command:
 
 ```
 /home/runcloud/webapps/n8n/n8n-data/fix_n8n_permissions.sh
