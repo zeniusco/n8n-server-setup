@@ -87,11 +87,17 @@ sudo rm -f /home/runcloud/webapps/n8n/n8n-data/postgres/.gitkeep
 # (Optional: Also remove from data folder, though not required for n8n to work)
 sudo rm -f /home/runcloud/webapps/n8n/n8n-data/data/.gitkeep
 
-# Make update_n8n.sh executable
+# Make scripts executable
 sudo chmod +x /home/runcloud/webapps/n8n/n8n-data/update_n8n.sh
 sudo chmod +x /home/runcloud/webapps/n8n/n8n-data/monitor-containers.sh
+sudo chmod +x /home/runcloud/webapps/n8n/n8n-data/install-and-migration.sh
+sudo chmod +x /home/runcloud/webapps/n8n/n8n-data/fix_n8n_permissions.sh
 ```
 
+# Install dos2unix (for line ending fixes):
+```
+sudo apt-get install dos2unix
+```
 ---
 
 ## 5. Set File and Folder Ownership
@@ -198,7 +204,27 @@ proxy_read_timeout 300s;
 
 ## Before you being this step: make sure you have followed this repo: [https://github.com/zeniusco/server-email-setup](https://github.com/zeniusco/server-email-setup) and installed server-wide mail system.
 
-### 11A. Auto-Update n8n
+### A. Fix Line Endings for All Text Files
+```
+for ext in sh json yml yaml env md; do find /home/runcloud/webapps/n8n/n8n-data/ -type f -name "*.$ext" -exec dos2unix {} \; || echo "$ext dos2unix failed" | mail -s "dos2unix fail" you@email.com; done
+```
+-   **Note:** Replace `you@email.com` with your real email address.
+-   **Vendor Binary:** Select **“Write your own”** in RunCloud and paste the command above.
+
+### B. Ensure 700 Permission for fix_n8n_permissions.sh
+```
+f=/home/runcloud/webapps/n8n/n8n-data/fix_n8n_permissions.sh;e=you@email.com;[ -e $f ]&&/usr/bin/chmod 700 $f||echo "$f:chmodfail" |/usr/bin/mail -s "chmodfail" $e;[ -e $f ]||echo "$f:missing"|/usr/bin/mail -s "missing" $e
+```
+-   **Note:** Replace `you@email.com` with your real email address.
+-   **Vendor Binary:** Select **“Write your own”** in RunCloud and paste the command above.
+
+### C. Fix All Other Permissions
+```
+/home/runcloud/webapps/n8n/n8n-data/fix_n8n_permissions.sh
+```
+-  **Vendor Binary:** Select **`/bin/bash`** in RunCloud.
+
+### D. Auto-Update n8n
 
 - Job Name: `n8n auto-update`
 - Command:
@@ -209,7 +235,7 @@ proxy_read_timeout 300s;
 - Run As: `runcloud`
 - Schedule: `0 3 * * *`
 
-### 11B. Logical PostgreSQL Backup
+### E. Logical PostgreSQL Backup
 
 - Job Name: `n8n postgres backup`
 - Command:
@@ -227,7 +253,7 @@ proxy_read_timeout 300s;
 -   You can restore this file on any PostgreSQL server using `psql` to recover all n8n data.
 
 
-### 11C. Monitor and Restart n8n and PostgreSQL Containers
+### F. Monitor and Restart n8n and PostgreSQL Containers
 
 - Job Name: `n8n container monitor`
 - Command:
