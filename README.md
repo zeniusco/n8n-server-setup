@@ -266,7 +266,7 @@ f=/home/runcloud/webapps/n8n/n8n-data/fix_n8n_permissions.sh;e=you@email.com;[ -
     cd /home/runcloud/webapps/n8n/n8n-data && PGPASSWORD=yourpassword pg_dump -U n8nuser -h 127.0.0.1 n8ndb > postgres/pg_backup_$(date +\%F).sql && find postgres -name 'pg_backup_*.sql' -mtime +30 -delete || echo FAIL | mail -s FAIL youremail@yourdomain.com
     ```
     
-- **Vendor Binary:** Select **`/bin/bash`** in RunCloud.
+- **Vendor Binary:** Select "Write your own" in RunCloud and paste the command above.
 - **Note:** Replace `you@email.com` with your real email address
 - **Note:** Replace yourpassword, n8nuser, and n8ndb with your actual DB credentials from .env.
 - Run As: `runcloud`
