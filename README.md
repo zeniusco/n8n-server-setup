@@ -173,7 +173,7 @@ proxy_set_header Connection "upgrade";
 proxy_read_timeout 300s;
 ```
 - **Save the file.**
-- **Click the “Reload Nginx” button in RunCloud** to apply the changes.
+- **Click the "Reload Nginx” button in RunCloud** to apply the changes.
 
 
 ## **9\. Install Docker & Docker Compose (One-Time, SSH Step)**
@@ -212,7 +212,7 @@ for ext in sh json yml yaml env md; do find /home/runcloud/webapps/n8n/n8n-data/
 ```
 
 - **Note:** Replace `you@email.com` with your real email address.
-- **Vendor Binary:** Select **“Write your own”** in RunCloud and paste the command above.
+- **Vendor Binary:** Select **"Write your own”** in RunCloud and paste the command above.
 - Run As: `runcloud`
 - Schedule: `0 */6 * * *` (every 6 hours)
 
@@ -226,7 +226,7 @@ f=/home/runcloud/webapps/n8n/n8n-data/fix_n8n_permissions.sh;e=you@email.com;[ -
 ```
 
 - **Note:** Replace `you@email.com` with your real email address.
-- **Vendor Binary:** Select **“Write your own”** in RunCloud and paste the command above.
+- **Vendor Binary:** Select **"Write your own”** in RunCloud and paste the command above.
 - Run As: `runcloud`
 - Schedule: `0 */6 * * *` (every 6 hours)
 
@@ -252,7 +252,7 @@ f=/home/runcloud/webapps/n8n/n8n-data/fix_n8n_permissions.sh;e=you@email.com;[ -
     cd /home/runcloud/webapps/n8n/n8n-data/ && docker-compose pull n8n && docker-compose up -d n8n && echo "$(date) OK" | mail -s "n8n Update SUCCESS" youremail@yourdomain.com|| echo "$(date) FAIL" | mail -s "n8n Update FAIL" youremail@yourdomain.com
     ```
     
-- **Vendor Binary:** Select **`/bin/bash`** in RunCloud.
+- **Vendor Binary:** Select "Write your own" in RunCloud and paste the command above.
 - Run As: `runcloud`
 - Schedule: `0 3 * * *` (every day at 3am, or any time you prefer)
 
@@ -313,7 +313,7 @@ f=/home/runcloud/webapps/n8n/n8n-data/fix_n8n_permissions.sh;e=you@email.com;[ -
 **A. Enable RunCloud’s Log Monitoring Features:**
 
 1.  **Go to your n8n web app in the RunCloud dashboard.**
-2.  **Navigate to the “Monitoring” section**
+2.  **Navigate to the "Monitoring” section**
 3.  **Enable the following features:**
     -   **Top Path** – to see your most frequently accessed URLs/routes.
     -   **IP Address Hit** – to monitor which IPs are making the most requests.
@@ -370,7 +370,7 @@ docker-compose up -d
 You must reload Nginx for changes to apply.
 
 -   Go to your web app in the RunCloud dashboard.
--   Click the “Reload Nginx” button.
+-   Click the "Reload Nginx” button.
 
 ## Secure Manual Update Workflow in n8n
 
@@ -467,7 +467,7 @@ You must reload Nginx for changes to apply.
             -   `n8n-data/data/` (workflows, credentials, config)
             -   `n8n-data/postgres/` (PostgreSQL data)
     -   Transfer via `rsync`, `scp`, SFTP, or RunCloud backup restore.
--   **Set ownerships with RunCloud “Fix File and Folder Ownership” tool.**
+-   **Set ownerships with RunCloud "Fix File and Folder Ownership” tool.**
 -   **Remove any `.gitkeep` files from the `postgres` directory:**
 -   ```sudo rm -f /home/runcloud/webapps/n8n/n8n-data/postgres/.gitkeep```
 
