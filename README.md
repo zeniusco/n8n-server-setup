@@ -87,6 +87,15 @@ sudo rm -f /home/runcloud/webapps/n8n/n8n-data/postgres/.gitkeep
 # (Optional: Also remove from data folder, though not required for n8n to work)
 sudo rm -f /home/runcloud/webapps/n8n/n8n-data/data/.gitkeep
 
+# Set correct ownership/permissions so the Docker n8n container can write to /home/node/.n8n
+sudo chown -R 1000:1000 /home/runcloud/webapps/n8n/n8n-data/data
+sudo chmod -R 700 /home/runcloud/webapps/n8n/n8n-data/data
+sudo setfacl -b /home/runcloud/webapps/n8n/n8n-data/data
+
+# (Optional: Fix .env permissions if needed)
+sudo chown 1000:1000 /home/runcloud/webapps/n8n/n8n-data/.env
+sudo chmod 600 /home/runcloud/webapps/n8n/n8n-data/.env
+
 # Make scripts executable
 sudo chmod +x /home/runcloud/webapps/n8n/n8n-data/update_n8n.sh
 sudo chmod +x /home/runcloud/webapps/n8n/n8n-data/monitor-containers.sh
