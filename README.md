@@ -96,7 +96,8 @@ sudo chmod +x /home/runcloud/webapps/n8n/n8n-data/fix_n8n_permissions.sh
 
 ## Install dos2unix (for line ending fixes):
 ```
-sudo apt-get install dos2unix
+sudo apt-get install -y dos2unix
+sudo apt-get install -y postgresql-client
 ```
 ---
 
