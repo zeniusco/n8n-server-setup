@@ -250,7 +250,7 @@ f=/home/runcloud/webapps/n8n/n8n-data/fix_n8n_permissions.sh;e=you@email.com;[ -
 - Command:
 
     ```bash
-    cd /home/runcloud/webapps/n8n/n8n-data/ && docker-compose pull n8n && docker-compose up -d n8n && echo "$(date) OK" | mail -s "n8n Update SUCCESS" youremail@yourdomain.com|| echo "$(date) FAIL" | mail -s "n8n Update FAIL" youremail@yourdomain.com
+    cd /home/runcloud/webapps/n8n/n8n-data && docker-compose pull n8n && docker-compose up -d n8n && systemctl reload nginx-rc && echo OK | mail -s n8nOK youremail@yourdomain.com || echo FAIL | mail -s n8nFAIL youremail@yourdomain.com
     ```
     
 - **Vendor Binary:** Select "Write your own" in RunCloud and paste the command above.
