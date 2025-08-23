@@ -273,7 +273,7 @@ f=/home/runcloud/webapps/n8n/n8n-data/fix_n8n_permissions.sh; e=you@domain.com; 
 - Command:
 
     ```bash
-    cd /home/runcloud/webapps/n8n/n8n-data && PGPASSWORD=yourpassword pg_dump -U n8nuser -h 127.0.0.1 n8ndb > postgres/pg_backup_$(date +\%F).sql && find postgres -name 'pg_backup_*.sql' -mtime +30 -delete || echo FAIL | mail -s FAIL youremail@yourdomain.com
+    cd /home/runcloud/webapps/n8n/n8n-data&&sudo docker-compose exec -T n8n-postgres bash -c "PGPASSWORD=yourpassword pg_dump -U n8nuser n8ndb">postgres/b$(date +%F);find postgres -name 'b*' -mtime +30 -delete||echo FAIL|mail -s FAIL youremail@yourdomain.com
     ```
     
 - **Vendor Binary:** Select "Write your own" in RunCloud and paste the command above.
