@@ -219,7 +219,7 @@ proxy_read_timeout 300s;
 - Command:
 
 ```
-for ext in sh json yml yaml env md; do sudo find /home/runcloud/webapps/n8n/n8n-data/ -type f -name "*.$ext" -exec sudo dos2unix {} \; || echo "$ext dos2unix failed" | mail -s "dos2unix fail" you@email.com; done
+for e in sh json yml yaml env md; do for f in $(sudo find /home/runcloud/webapps/n8n/n8n-data/ -type f -name "*.$e" 2>/dev/null); do sudo dos2unix "$f" || echo "$f dos2unix failed" | mail -s "dos2unix fail" you@email.com; done; done
 ```
 
 - **Note:** Replace `you@email.com` with your real email address.
