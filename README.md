@@ -252,7 +252,7 @@ f=/home/runcloud/webapps/n8n/n8n-data/fix_n8n_permissions.sh; e=you@domain.com; 
 ### E. Logical PostgreSQL Backup
 - Job Name: `n8n postgres backup`
 ```
-    cd /home/runcloud/webapps/n8n/n8n-data&&sudo docker-compose exec -T n8n-postgres bash -c "PGPASSWORD=yourpassword pg_dump -U n8nuser n8ndb">postgres/b$(date +%F);find postgres -name 'b*' -mtime +30 -delete||echo FAIL|mail -s FAIL you@domain.com
+cd /home/runcloud/webapps/n8n/n8n-data&&sudo docker-compose exec -T n8n-postgres bash -c "PGPASSWORD=yourpassword pg_dump -U n8nuser n8ndb">postgres/b$(date +%F).sql&&find postgres -name 'b*' -mtime +30 -delete||echo FAIL|mail -s FAIL you@domain.com
 ```
 - **Note:** Replace yourpassword, n8nuser, and n8ndb with your actual DB credentials from .env.
 
