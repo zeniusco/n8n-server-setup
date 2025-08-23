@@ -1,4 +1,3 @@
-# n8n + Docker + PostgreSQL on RunCloud  
 **Subdomain:** `sub.domain.com`  
 **Web App Name:** `n8n`  
 **Web App Path:** `/home/runcloud/webapps/n8n/`
@@ -321,6 +320,15 @@ if ! pgrep dockerd > /dev/null; then service docker start || echo "Docker could 
 ---
 
 ## Tips: What To Do If You Update `docker-compose.yml`, `.env`, or Nginx `.conf` Files
+
+## For Puppeteer Workflow
+
+**Always add below two arguments in Launch Arguments**
+
+`--no-sandbox`
+`--disable-setuid-sandbox`
+
+<img width="441" height="298" alt="image" src="https://github.com/user-attachments/assets/32e13918-405f-4a72-8359-bed70b1eb8ef" />
 
 ### If you update `docker-compose.yml` or `.env`:
 You must restart Docker containers so changes take effect.
