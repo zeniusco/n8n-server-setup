@@ -212,75 +212,49 @@ proxy_read_timeout 300s;
 
 ## Add each of these cron jobs separately in your RunCloud Cron Jobs UI, specifying the user and schedule for each.
 
+## Replace `you@domain.com` with your real email address
+
+|Job Name|Run As|Time To Run|Vendor Binary|
+|:----|:----|:----|:----|
+|auto fix line endings|root|Every hour (0 * * * *)|Write your own|
+|chmod 700 fix_n8n_permissions|runcloud|Every 30 minutes (*/30 * * * *)|Write your own|
+|chmod permission fix all|root|Every 40 minutes (*/40 * * * *)|/bin/bash|
+|docker restart|root|Every 15 minutes (*/15 * * * *)|Write your own|
+|n8n auto update|root|At 03:00 AM (0 3 * * *)|Write your own|
+|n8n container monitor|root|Every 10 minutes (*/10 * * * *)|/bin/bash|
+|n8n postgres backup|root|At 02:00 AM (0 2 * * *)|Write your own|
+
+
 ### A. Fix Line Endings for All Text Files
-
 - Job Name: `auto fix line endings`
-- Command:
-
 ```
-for e in sh json yml yaml env md; do for f in $(sudo find /home/runcloud/webapps/n8n/n8n-data/ -type f -name "*.$e" 2>/dev/null); do sudo dos2unix "$f" || echo "$f dos2unix failed" | mail -s "dos2unix fail" you@email.com; done; done
+for e in sh json yml yaml env md; do for f in $(sudo find /home/runcloud/webapps/n8n/n8n-data/ -type f -name "*.$e" 2>/dev/null); do sudo dos2unix "$f" || echo "$f dos2unix failed" | mail -s "dos2unix fail" you@domain.com; done; done
 ```
-
-- **Note:** Replace `you@email.com` with your real email address.
-- **Vendor Binary:** Select **"Write your own”** in RunCloud and paste the command above.
-- Run As: `root`
-- Schedule: `0 */6 * * *` (every 6 hours)
 
 ### B. Ensure 700 Permission for fix_n8n_permissions.sh
-
 - Job Name: `chmod 700 fix_n8n_permissions`
-- Command:
-
 ```
 f=/home/runcloud/webapps/n8n/n8n-data/fix_n8n_permissions.sh; e=you@domain.com; if [ -e "$f" ]; then sudo /usr/bin/chmod 700 "$f" || echo "$f:chmodfail" | /usr/bin/mail -s "chmodfail" $e; else echo "$f:missing" | /usr/bin/mail -s "missing" $e; fi
 ```
 
-- **Note:** Replace `you@email.com` with your real email address.
-- **Vendor Binary:** Select **"Write your own”** in RunCloud and paste the command above.
-- Run As: `root`
-- Schedule: `0 */6 * * *` (every 6 hours)
-
 ### C. Fix All Other Permissions
-
 - Job Name: `chmod permission fix all`
-- Command:
-
 ```
 /home/runcloud/webapps/n8n/n8n-data/fix_n8n_permissions.sh
 ```
 
-- **Vendor Binary:** Select **`/bin/bash`** in RunCloud.
-- Run As: `root`
-- Schedule: `0 */6 * * *` (every 6 hours)
-
 ### D. Auto-Update n8n & Run Fix n8n Permission Script
-
 - Job Name: `n8n auto-update`
-- Command:
-
     ```bash
-    cd /home/runcloud/webapps/n8n/n8n-data && docker-compose pull n8n && docker-compose up -d n8n && ./fix_n8n_permissions.sh && echo OK | mail -s n8nOK youremail@yourdomain.com || echo FAIL | mail -s n8nFAIL youremail@yourdomain.com
+    cd /home/runcloud/webapps/n8n/n8n-data && docker-compose pull n8n && docker-compose up -d n8n && ./fix_n8n_permissions.sh && echo OK | mail -s n8nOK you@domain.com || echo FAIL | mail -s n8nFAIL you@domain.com
     ```
-    
-- **Vendor Binary:** Select "Write your own" in RunCloud and paste the command above.
-- Run As: `runcloud`
-- Schedule: `0 3 * * *` (every day at 3am, or any time you prefer)
-
 
 ### E. Logical PostgreSQL Backup
-
 - Job Name: `n8n postgres backup`
-- Command:
-
     ```bash
-    cd /home/runcloud/webapps/n8n/n8n-data&&sudo docker-compose exec -T n8n-postgres bash -c "PGPASSWORD=yourpassword pg_dump -U n8nuser n8ndb">postgres/b$(date +%F);find postgres -name 'b*' -mtime +30 -delete||echo FAIL|mail -s FAIL youremail@yourdomain.com
+    cd /home/runcloud/webapps/n8n/n8n-data&&sudo docker-compose exec -T n8n-postgres bash -c "PGPASSWORD=yourpassword pg_dump -U n8nuser n8ndb">postgres/b$(date +%F);find postgres -name 'b*' -mtime +30 -delete||echo FAIL|mail -s FAIL you@domain.com
     ```
-    
-- **Vendor Binary:** Select "Write your own" in RunCloud and paste the command above.
-- **Note:** Replace `you@email.com` with your real email address
 - **Note:** Replace yourpassword, n8nuser, and n8ndb with your actual DB credentials from .env.
-- Run As: `runcloud`
-- Schedule: `0 2 * * *` (every day at 2am, or any time you prefer)
 
 #### **What is a logical PostgreSQL backup?**
 - `pg_dump` creates a logical (SQL) backup of your PostgreSQL database, saving all your n8n data—including workflows, credentials, history, etc.—as a portable `.sql` file.
@@ -288,34 +262,15 @@ f=/home/runcloud/webapps/n8n/n8n-data/fix_n8n_permissions.sh; e=you@domain.com; 
 
 ### F. Monitor and Restart n8n and PostgreSQL Containers
 - Job Name: `n8n container monitor`
-- Command:
-  
     ```bash
     /home/runcloud/webapps/n8n/n8n-data/monitor-containers.sh
     ```
 
-- **Note:** Replace `you@email.com` with your real email address
-- **Vendor Binary:** Select **`/bin/bash`** in RunCloud.
-- Run As: `runcloud`
-- Schedule: `*/10 * * * *` (every 10 minutes)
-
-**What does this do?**
--   This script checks if the n8n and PostgreSQL containers are running every 5 minutes.
--   If either container is not running, it will automatically restart both by running `docker-compose up -d`.
-
 ### G. Docker Restart
 - Job Name: `docker restart`
-- Command:
-  
     ```bash
-    if ! pgrep dockerd > /dev/null; then service docker start || echo "Docker could not be started on $(hostname) at $(date)" | mail -s "Docker restart FAIL" youremail@yourdomain.com; fi
+    if ! pgrep dockerd > /dev/null; then service docker start || echo "Docker could not be started on $(hostname) at $(date)" | mail -s "Docker restart FAIL" you@domain.com; fi
     ```
-
-- **Note:** Replace `you@email.com` with your real email address
-- **Vendor Binary:** Write your own
-- Run As: `root`
-- Schedule: `*/10 * * * *` (every 10 minutes)
-
 ---
 
 ## 12. Log Monitoring & Notifications
