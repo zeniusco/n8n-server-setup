@@ -233,7 +233,7 @@ for e in sh json yml yaml env md; do for f in $(sudo find /home/runcloud/webapps
 - Command:
 
 ```
-f=/home/runcloud/webapps/n8n/n8n-data/fix_n8n_permissions.sh; e=you@email.com; [ -e $f ] && sudo /usr/bin/chmod 700 $f || echo "$f:chmodfail" | /usr/bin/mail -s "chmodfail" $e; [ -e $f ] || echo "$f:missing" | /usr/bin/mail -s "missing" $e
+f=/home/runcloud/webapps/n8n/n8n-data/fix_n8n_permissions.sh; e=you@domain.com; if [ -e "$f" ]; then sudo /usr/bin/chmod 700 "$f" || echo "$f:chmodfail" | /usr/bin/mail -s "chmodfail" $e; else echo "$f:missing" | /usr/bin/mail -s "missing" $e; fi
 ```
 
 - **Note:** Replace `you@email.com` with your real email address.
