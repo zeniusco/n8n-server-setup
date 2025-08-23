@@ -245,15 +245,15 @@ f=/home/runcloud/webapps/n8n/n8n-data/fix_n8n_permissions.sh; e=you@domain.com; 
 
 ### D. Auto-Update n8n & Run Fix n8n Permission Script
 - Job Name: `n8n auto-update`
-    ```bash
+```
     cd /home/runcloud/webapps/n8n/n8n-data && docker-compose pull n8n && docker-compose up -d n8n && ./fix_n8n_permissions.sh && echo OK | mail -s n8nOK you@domain.com || echo FAIL | mail -s n8nFAIL you@domain.com
-    ```
+```
 
 ### E. Logical PostgreSQL Backup
 - Job Name: `n8n postgres backup`
-    ```bash
+```
     cd /home/runcloud/webapps/n8n/n8n-data&&sudo docker-compose exec -T n8n-postgres bash -c "PGPASSWORD=yourpassword pg_dump -U n8nuser n8ndb">postgres/b$(date +%F);find postgres -name 'b*' -mtime +30 -delete||echo FAIL|mail -s FAIL you@domain.com
-    ```
+```
 - **Note:** Replace yourpassword, n8nuser, and n8ndb with your actual DB credentials from .env.
 
 #### **What is a logical PostgreSQL backup?**
@@ -262,15 +262,15 @@ f=/home/runcloud/webapps/n8n/n8n-data/fix_n8n_permissions.sh; e=you@domain.com; 
 
 ### F. Monitor and Restart n8n and PostgreSQL Containers
 - Job Name: `n8n container monitor`
-    ```bash
+```
     /home/runcloud/webapps/n8n/n8n-data/monitor-containers.sh
-    ```
+```
 
 ### G. Docker Restart
 - Job Name: `docker restart`
-    ```bash
+```
     if ! pgrep dockerd > /dev/null; then service docker start || echo "Docker could not be started on $(hostname) at $(date)" | mail -s "Docker restart FAIL" you@domain.com; fi
-    ```
+```
 ---
 
 ## 12. Log Monitoring & Notifications
