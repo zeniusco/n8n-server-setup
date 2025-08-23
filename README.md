@@ -217,7 +217,7 @@ proxy_read_timeout 300s;
 |Job Name|Run As|Time To Run|Vendor Binary|
 |:----|:----|:----|:----|
 |auto fix line endings|root|Every hour (0 * * * *)|Write your own|
-|chmod 700 fix_n8n_permissions|runcloud|Every 30 minutes (*/30 * * * *)|Write your own|
+|chmod 700 fix_n8n_permissions|root|Every 30 minutes (*/30 * * * *)|Write your own|
 |chmod permission fix all|root|Every 40 minutes (*/40 * * * *)|/bin/bash|
 |docker restart|root|Every 15 minutes (*/15 * * * *)|Write your own|
 |n8n auto update|root|At 03:00 AM (0 3 * * *)|Write your own|
