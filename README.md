@@ -11,6 +11,7 @@ n8n-setup/
 ├── n8n-data/
 │ ├── docker-compose.yml
 │ ├── .env.example
+│ ├── Dockerfile
 │ ├── update_n8n.sh
 │ ├── install-and-migration.sh
 │ ├── monitor-containers.sh
