@@ -253,13 +253,13 @@ f=/home/runcloud/webapps/n8n/n8n-data/fix_n8n_permissions.sh; e=you@domain.com; 
 - Run As: `root`
 - Schedule: `0 */6 * * *` (every 6 hours)
 
-### D. Auto-Update n8n
+### D. Auto-Update n8n & Run Fix n8n Permission Script
 
 - Job Name: `n8n auto-update`
 - Command:
 
     ```bash
-    cd /home/runcloud/webapps/n8n/n8n-data && docker-compose pull n8n && docker-compose up -d n8n && systemctl reload nginx-rc && echo OK | mail -s n8nOK youremail@yourdomain.com || echo FAIL | mail -s n8nFAIL youremail@yourdomain.com
+    cd /home/runcloud/webapps/n8n/n8n-data && docker-compose pull n8n && docker-compose up -d n8n && ./fix_n8n_permissions.sh && echo OK | mail -s n8nOK youremail@yourdomain.com || echo FAIL | mail -s n8nFAIL youremail@yourdomain.com
     ```
     
 - **Vendor Binary:** Select "Write your own" in RunCloud and paste the command above.
