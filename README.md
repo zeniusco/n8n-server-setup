@@ -1,4 +1,3 @@
-f=/home/runcloud/webapps/n8n/n8n-data/fix_n8n_permissions.sh; e=admin@zenius.co; [ -e $f ] && sudo /usr/bin/chmod 700 $f || echo "$f:chmodfail" | /usr/bin/mail -s "chmodfail" $e; [ -e $f ] || echo "$f:missing" | /usr/bin/mail -s "missing" $e
 # n8n + Docker + PostgreSQL on RunCloud  
 **Subdomain:** `sub.domain.com`  
 **Web App Name:** `n8n`  
