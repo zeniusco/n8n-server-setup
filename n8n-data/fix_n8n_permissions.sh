@@ -24,6 +24,7 @@ declare -A items=(
   ["$DATA_DIR/monitor-containers.sh"]="700"
   ["$DATA_DIR/update_n8n.sh"]="700"
   ["$DATA_DIR/docker-compose.yml"]="644"
+  ["$DATA_DIR/Dockerfile"]="644"
 )
 
 for item in "${!items[@]}"; do
