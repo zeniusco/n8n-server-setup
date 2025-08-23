@@ -340,6 +340,7 @@ if ! pgrep dockerd > /dev/null; then service docker start || echo "Docker could 
 ### After Editing Dockerfile
 Whenever you make changes to your Dockerfile, run this code in SSH:
 ```
+cd /home/runcloud/webapps/n8n/n8n-data/
 sudo docker-compose build --no-cache n8n
 sudo docker-compose up -d n8n
 ```
