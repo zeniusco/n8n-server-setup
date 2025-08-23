@@ -152,9 +152,9 @@ DB_POSTGRESDB_PASSWORD=supersecret
 
 # SMTP settings for Send Email node
 N8N_SMTP_HOST=smtp.example.com
-N8N_SMTP_USER=your@email.com
+N8N_SMTP_USER=you@domain.com
 N8N_SMTP_PASS=yourpassword
-N8N_SMTP_SENDER=your@email.com
+N8N_SMTP_SENDER=you@domain.com
 N8N_SMTP_PORT=587
 N8N_SMTP_SSL=false
 ```
@@ -234,7 +234,7 @@ for e in sh json yml yaml env md; do for f in $(sudo find /home/runcloud/webapps
 ### B. Ensure 700 Permission for fix_n8n_permissions.sh
 - Job Name: `chmod 700 fix_n8n_permissions`
 ```
-f=/home/runcloud/webapps/n8n/n8n-data/fix_n8n_permissions.sh; e=you@domain.com; if [ -e "$f" ]; then sudo /usr/bin/chmod 700 "$f" || echo "$f:chmodfail" | /usr/bin/mail -s "chmodfail" $e; else echo "$f:missing" | /usr/bin/mail -s "missing" $e; fi
+	f=/home/runcloud/webapps/n8n/n8n-data/fix_n8n_permissions.sh; e=you@domain.com; if [ -e "$f" ]; then sudo /usr/bin/chmod 700 "$f" || echo "$f:chmodfail" | /usr/bin/mail -s "chmodfail" $e; else echo "$f:missing" | /usr/bin/mail -s "missing" $e; fi
 ```
 
 ### C. Fix All Other Permissions
@@ -246,7 +246,7 @@ f=/home/runcloud/webapps/n8n/n8n-data/fix_n8n_permissions.sh; e=you@domain.com; 
 ### D. Auto-Update n8n & Run Fix n8n Permission Script
 - Job Name: `n8n auto-update`
 ```
-    cd /home/runcloud/webapps/n8n/n8n-data && docker-compose pull n8n && docker-compose up -d n8n && ./fix_n8n_permissions.sh && echo OK | mail -s n8nOK you@domain.com || echo FAIL | mail -s n8nFAIL you@domain.com
+cd /home/runcloud/webapps/n8n/n8n-data&&o=$(docker-compose pull n8n);echo $o|grep -q "Downloaded"&&s="UPDATED"||s="OK";docker-compose up -d n8n&&./fix_n8n_permissions.sh&&echo $o|mail -s "n8n$s" you@domain.com||echo n8nFAIL|mail -s FAIL you@domain.com
 ```
 
 ### E. Logical PostgreSQL Backup
@@ -263,13 +263,13 @@ cd /home/runcloud/webapps/n8n/n8n-data&&sudo docker-compose exec -T n8n-postgres
 ### F. Monitor and Restart n8n and PostgreSQL Containers
 - Job Name: `n8n container monitor`
 ```
-    /home/runcloud/webapps/n8n/n8n-data/monitor-containers.sh
+/home/runcloud/webapps/n8n/n8n-data/monitor-containers.sh
 ```
 
 ### G. Docker Restart
 - Job Name: `docker restart`
 ```
-    if ! pgrep dockerd > /dev/null; then service docker start || echo "Docker could not be started on $(hostname) at $(date)" | mail -s "Docker restart FAIL" you@domain.com; fi
+if ! pgrep dockerd > /dev/null; then service docker start || echo "Docker could not be started on $(hostname) at $(date)" | mail -s "Docker restart FAIL" you@domain.com; fi
 ```
 ---
 
