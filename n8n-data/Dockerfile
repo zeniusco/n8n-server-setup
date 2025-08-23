@@ -16,7 +16,8 @@ ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium-browser
 
 USER node
 
-# Install puppeteer-extra-plugin-user-preferences in the n8n-nodes-puppeteer node directory
 RUN mkdir -p /home/node/.n8n/nodes/node_modules/n8n-nodes-puppeteer && \
     cd /home/node/.n8n/nodes/node_modules/n8n-nodes-puppeteer && \
-    npm install puppeteer-extra-plugin-user-preferences
+    npm install puppeteer-extra-plugin-user-preferences && \
+    cd /home/node/.n8n && \
+    npm install puppeteer-extra puppeteer-extra-plugin-stealth puppeteer-extra-plugin-user-preferences
