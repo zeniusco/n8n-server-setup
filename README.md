@@ -330,6 +330,13 @@ if ! pgrep dockerd > /dev/null; then service docker start || echo "Docker could 
 
 <img width="441" height="298" alt="image" src="https://github.com/user-attachments/assets/32e13918-405f-4a72-8359-bed70b1eb8ef" />
 
+## Editing Dockerfile
+Whenever you make changes to your Dockerfile, run this code in SSH:
+```
+sudo docker-compose build --no-cache n8n
+sudo docker-compose up -d n8n
+```
+
 ### If you update `docker-compose.yml` or `.env`:
 You must restart Docker containers so changes take effect.
 
