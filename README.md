@@ -321,7 +321,7 @@ if ! pgrep dockerd > /dev/null; then service docker start || echo "Docker could 
 
 ## Tips: What To Do If You Update `docker-compose.yml`, `.env`, or Nginx `.conf` Files
 
-## For Puppeteer Workflow
+### For Puppeteer Workflow
 
 **Always add below two arguments in Launch Arguments**
 
@@ -330,7 +330,7 @@ if ! pgrep dockerd > /dev/null; then service docker start || echo "Docker could 
 
 <img width="441" height="298" alt="image" src="https://github.com/user-attachments/assets/32e13918-405f-4a72-8359-bed70b1eb8ef" />
 
-## Editing Dockerfile
+### Editing Dockerfile
 Whenever you make changes to your Dockerfile, run this code in SSH:
 ```
 sudo docker-compose build --no-cache n8n
