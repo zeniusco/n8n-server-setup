@@ -188,13 +188,20 @@ proxy_read_timeout 300s;
 
 ## **9\. Install Docker & Docker Compose (One-Time, SSH Step)**
 
-    ```bash
-    sudo bash /home/runcloud/webapps/n8n/n8n-data/install-and-migration.sh
-    ```
+ ```bash
+ sudo bash /home/runcloud/webapps/n8n/n8n-data/install-and-migration.sh
+ ```
+
+## **10\. Install Custom n8n Docker Image for Chromium required for Puppeteer and dependencies
+
+```bash
+cd /home/runcloud/webapps/n8n/n8n-data/
+sudo docker-compose build --no-cache n8n
+```
 
 ---
 
-## 10. Start PostgreSQL & n8n (SSH as runcloud user)
+## 11. Start PostgreSQL & n8n (SSH as runcloud user)
   
     ```bash
     sudo -i -u runcloud
@@ -206,7 +213,7 @@ proxy_read_timeout 300s;
 
 ---
 
-## 11. Set Up Cron Jobs (For Recurring Tasks)
+## 12. Set Up Cron Jobs (For Recurring Tasks)
 
 ## Before you being this step: make sure you have followed this repo: [https://github.com/zeniusco/server-email-setup](https://github.com/zeniusco/server-email-setup) and installed server-wide mail system.
 
@@ -273,7 +280,7 @@ if ! pgrep dockerd > /dev/null; then service docker start || echo "Docker could 
 ```
 ---
 
-## 12. Log Monitoring & Notifications
+## 13. Log Monitoring & Notifications
  
 **A. Enable RunCloud’s Log Monitoring Features:**
 
@@ -294,7 +301,7 @@ if ! pgrep dockerd > /dev/null; then service docker start || echo "Docker could 
 
 ---
 
-## 13. Create an Error Trigger Node in n8n to send all workflow failure email notification
+## 14. Create an Error Trigger Node in n8n to send all workflow failure email notification
 
 **Step 1: Add the Error Trigger Node**
 
@@ -330,7 +337,7 @@ if ! pgrep dockerd > /dev/null; then service docker start || echo "Docker could 
 
 <img width="441" height="298" alt="image" src="https://github.com/user-attachments/assets/32e13918-405f-4a72-8359-bed70b1eb8ef" />
 
-### Editing Dockerfile
+### After Editing Dockerfile
 Whenever you make changes to your Dockerfile, run this code in SSH:
 ```
 sudo docker-compose build --no-cache n8n
