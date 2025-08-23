@@ -223,7 +223,7 @@ for e in sh json yml yaml env md; do for f in $(sudo find /home/runcloud/webapps
 
 - **Note:** Replace `you@email.com` with your real email address.
 - **Vendor Binary:** Select **"Write your own”** in RunCloud and paste the command above.
-- Run As: `runcloud`
+- Run As: `root`
 - Schedule: `0 */6 * * *` (every 6 hours)
 
 ### B. Ensure 700 Permission for fix_n8n_permissions.sh
@@ -237,7 +237,7 @@ f=/home/runcloud/webapps/n8n/n8n-data/fix_n8n_permissions.sh; e=you@domain.com; 
 
 - **Note:** Replace `you@email.com` with your real email address.
 - **Vendor Binary:** Select **"Write your own”** in RunCloud and paste the command above.
-- Run As: `runcloud`
+- Run As: `root`
 - Schedule: `0 */6 * * *` (every 6 hours)
 
 ### C. Fix All Other Permissions
