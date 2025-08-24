@@ -4,6 +4,8 @@ services:
       context: .
       dockerfile: Dockerfile
     restart: unless-stopped
+    cap_add:
+      - SYS_ADMIN
     env_file:
       - .env
     ports:
