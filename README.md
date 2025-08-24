@@ -43,11 +43,13 @@ n8n-data/postgres/
 - Domain: `sub.domain.com`
 - Web Application Name: `n8n`
 - Root Path: `/home/runcloud/webapps/n8n/`
+- Web Application Stack: Native NGINX + Custom config
 - Create Application
 - **Enable RunCloud Backup for this web app**:
 -   Go to **Backups** in the RunCloud dashboard.
 -   Add a backup job targeting `/home/runcloud/webapps/n8n/`.
 -   Set schedule and retention as desired.
+
 
 ---
 
