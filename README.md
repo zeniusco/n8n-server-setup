@@ -117,9 +117,10 @@ sudo apt-get install -y postgresql-client
 -   In RunCloud dashboard, go to your `n8n` web app.
 -   Go to **Nginx Config > Add Custom Config**.
 -   Set:
-    -   **Type:** `location.root`
-    -   **Filename:** `deny-n8n-data`
-    -   **Content:**
+    - **Predefined Config (Optional):** I want to write my own config
+    - **Type:** `location.root`
+    - **Config Name:** `deny-n8n-data`
+    - **Config Content:**
 
     ```nginx
     location ^~ /n8n-data/ {
