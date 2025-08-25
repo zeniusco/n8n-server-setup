@@ -164,7 +164,7 @@ N8N_SMTP_SSL=false
 3.  Under **Predefined Config (Optional):**
     -   Look for **Proxy: Effortlessly turn NGINX as a proxy server**
     -   **Type:** `location.root`
-    -   **Config Name:** `/etc/nginx-rc/extra.d/n8n.location.root.nginx-proxy.conf`
+    -   **Config Name:** `nginx-proxy`
 4.  **Edit `/etc/nginx-rc/extra.d/n8n.location.root.nginx-proxy.conf`** and paste in only these lines:
 ```
 proxy_pass http://127.0.0.1:5678;
