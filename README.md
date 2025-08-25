@@ -184,14 +184,13 @@ proxy_read_timeout 300s;
 ## **9\. Install Docker & Docker Compose (One-Time, SSH Step)**
 
  ```bash
- sudo /fix_n8n_permissions.sh
+ /home/runcloud/webapps/n8n/n8n-data/fix_n8n_permissions.sh
  sudo bash /home/runcloud/webapps/n8n/n8n-data/install-and-migration.sh
  ```
 
 ## **10\. Install Custom n8n Docker Image for Chromium required for Puppeteer and dependencies
 
 ```bash
-/home/runcloud/webapps/n8n/n8n-data/fix_n8n_permissions.sh
 sudo docker-compose build --no-cache n8n
 ```
 
