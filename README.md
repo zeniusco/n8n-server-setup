@@ -64,7 +64,7 @@ n8n-data/postgres/
 
 ## 4. Upload Files, Remove `.gitkeep`, and Make scripts Executable
 
-**Login to SSH via Putty as root 'sudo -i'**
+**Login to SSH via Putty as root `sudo -i`**
 ```
 if ! command -v unzip &> /dev/null; then
   sudo apt-get update
