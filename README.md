@@ -184,7 +184,7 @@ proxy_read_timeout 300s;
 ## **9\. Install Docker & Docker Compose (One-Time, SSH Step)**
 
  ```bash
- /home/runcloud/webapps/n8n/n8n-data/fix_n8n_permissions.sh
+ sudo bash /home/runcloud/webapps/n8n/n8n-data/fix_n8n_permissions.sh
  sudo bash /home/runcloud/webapps/n8n/n8n-data/install-and-migration.sh
  ```
 
