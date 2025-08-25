@@ -191,6 +191,7 @@ proxy_read_timeout 300s;
 ## **10\. Install Custom n8n Docker Image for Chromium required for Puppeteer and dependencies
 
 ```bash
+cd /home/runcloud/webapps/n8n/n8n-data/
 sudo docker-compose build --no-cache n8n
 ```
 
