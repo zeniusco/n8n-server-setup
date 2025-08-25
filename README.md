@@ -199,12 +199,12 @@ sudo docker-compose build --no-cache n8n
 
 ## 11. Start PostgreSQL & n8n (SSH as runcloud user)
   
-    ```bash
-    sudo -i -u runcloud
-    cd /home/runcloud/webapps/n8n/n8n-data/
-    docker-compose up -d n8n-postgres
-    docker-compose up -d n8n
-    ```
+```
+sudo -i -u runcloud
+cd /home/runcloud/webapps/n8n/n8n-data/
+docker-compose up -d n8n-postgres
+docker-compose up -d n8n
+```
 - Visit [https://sub.domain.com](https://sub.domain.com) to test.
 
 ---
